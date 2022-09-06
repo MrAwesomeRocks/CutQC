@@ -1,4 +1,5 @@
 import subprocess, os
+import shutil
 from time import perf_counter
 
 from cutqc.helper_fun import check_valid, add_times
@@ -36,7 +37,7 @@ class CutQC:
         self.times = {}
         self.tmp_data_folder = "cutqc/tmp_data"
         if os.path.exists(self.tmp_data_folder):
-            subprocess.run(["rm", "-r", self.tmp_data_folder])
+            self.clean_data()
         os.makedirs(self.tmp_data_folder)
 
     def cut(self):
@@ -142,8 +143,8 @@ class CutQC:
         )
         print("verify took %.3f" % (perf_counter() - verify_begin))
 
-    def clean_data(self):
-        subprocess.run(["rm", "-r", self.tmp_data_folder])
+    def clean_data(self) -> None:
+        shutil.rmtree(self.tmp_data_folder)
 
     def _generate_metadata(self):
         self.compute_graph = generate_compute_graph(
@@ -172,7 +173,7 @@ class CutQC:
         if self.verbose:
             print("--> Running Subcircuits %s" % self.name)
         if os.path.exists(self.tmp_data_folder):
-            subprocess.run(["rm", "-r", self.tmp_data_folder])
+            self.clean_data()
         os.makedirs(self.tmp_data_folder)
         run_subcircuit_instances(
             subcircuits=self.subcircuits,
