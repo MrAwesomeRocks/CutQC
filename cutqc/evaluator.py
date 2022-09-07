@@ -1,9 +1,14 @@
-import itertools, copy, pickle, subprocess, psutil, os
-import numpy as np
-from qiskit.converters import circuit_to_dag, dag_to_circuit
-from qiskit.circuit.library.standard_gates import HGate, SGate, SdgGate, XGate
+import copy
+import itertools
+import os
+import pickle
+import multiprocessing
 
+import numpy as np
+import psutil
 from helper_functions.non_ibmq_functions import find_process_jobs, scrambled
+from qiskit.circuit.library.standard_gates import HGate, SdgGate, SGate, XGate
+from qiskit.converters import circuit_to_dag, dag_to_circuit
 
 
 def get_num_workers(num_jobs, ram_required_per_worker):
@@ -45,20 +50,24 @@ def run_subcircuit_instances(
             * 4
             / 1e9,
         )
-        procs = []
+
+        # Circular imports :(
+        from cutqc.parallel_run_subcircuits import run_subcircuit
+
+        procs: list[multiprocessing.Process] = []
         for rank in range(num_workers):
             rank_jobs = find_process_jobs(jobs=jobs, rank=rank, num_workers=num_workers)
             if len(rank_jobs) > 0:
                 pickle.dump(
                     rank_jobs, open("%s/rank_%d.pckl" % (data_folder, rank), "wb")
                 )
-                python_command = (
-                    "python -m cutqc.parallel_run_subcircuits --data_folder %s --subcircuit_idx %d --rank %d"
-                    % (data_folder, subcircuit_idx, rank)
+
+                proc = multiprocessing.Process(
+                    target=run_subcircuit, args=(rank, subcircuit_idx, data_folder)
                 )
-                proc = subprocess.Popen(python_command.split(" "))
+                proc.start()
                 procs.append(proc)
-        [proc.wait() for proc in procs]
+        [proc.join() for proc in procs]
 
 
 def mutate_measurement_basis(meas):
@@ -205,7 +214,11 @@ def attribute_shots(subcircuit_entries, subcircuits, eval_mode, data_folder):
             * 4
             / 1e9,
         )
-        procs = []
+
+        # Circular imports :(
+        from cutqc.parallel_attribute_shots import run_attribute_shots
+
+        procs: list[multiprocessing.Process] = []
         for rank in range(num_workers):
             rank_jobs = find_process_jobs(jobs=jobs, rank=rank, num_workers=num_workers)
             rank_jobs = {
@@ -215,10 +228,10 @@ def attribute_shots(subcircuit_entries, subcircuits, eval_mode, data_folder):
                 pickle.dump(
                     rank_jobs, open("%s/rank_%d.pckl" % (data_folder, rank), "wb")
                 )
-                python_command = (
-                    "python -m cutqc.parallel_attribute_shots --data_folder %s --subcircuit_idx %d --rank %d"
-                    % (data_folder, subcircuit_idx, rank)
+
+                proc = multiprocessing.Process(
+                    target=run_attribute_shots, args=(rank, subcircuit_idx, data_folder)
                 )
-                proc = subprocess.Popen(python_command.split(" "))
+                proc.start()
                 procs.append(proc)
-        [proc.wait() for proc in procs]
+        [proc.join() for proc in procs]

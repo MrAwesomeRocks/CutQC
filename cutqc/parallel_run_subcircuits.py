@@ -1,29 +1,23 @@
-import argparse, pickle, os
+import argparse
+import os
+import pickle
 
 from helper_functions.non_ibmq_functions import evaluate_circ
 
 from cutqc.evaluator import (
+    measure_prob,
     modify_subcircuit_instance,
     mutate_measurement_basis,
-    measure_prob,
 )
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Process some integers.")
-    parser.add_argument("--data_folder", metavar="S", type=str)
-    parser.add_argument("--subcircuit_idx", metavar="N", type=int)
-    parser.add_argument("--rank", metavar="N", type=int)
-    args = parser.parse_args()
 
-    subcircuit_idx = args.subcircuit_idx
-    meta_info = pickle.load(open("%s/meta_info.pckl" % (args.data_folder), "rb"))
+def run_subcircuit(rank: int, subcircuit_idx: int, data_folder: str) -> None:
+    meta_info = pickle.load(open("%s/meta_info.pckl" % (data_folder), "rb"))
     subcircuit = meta_info["subcircuits"][subcircuit_idx]
     eval_mode = meta_info["eval_mode"]
     num_shots_fn = meta_info["num_shots_fn"]
     instance_init_meas_ids = meta_info["instance_init_meas_ids"][subcircuit_idx]
-    rank_jobs = pickle.load(
-        open("%s/rank_%d.pckl" % (args.data_folder, args.rank), "rb")
-    )
+    rank_jobs = pickle.load(open("%s/rank_%d.pckl" % (data_folder, rank), "rb"))
 
     uniform_p = 1 / 2**subcircuit.num_qubits
     num_shots = num_shots_fn(subcircuit) if num_shots_fn is not None else None
@@ -63,8 +57,18 @@ if __name__ == "__main__":
                 measured_prob,
                 open(
                     "%s/subcircuit_%d_instance_%d.pckl"
-                    % (args.data_folder, subcircuit_idx, instance_init_meas_id),
+                    % (data_folder, subcircuit_idx, instance_init_meas_id),
                     "wb",
                 ),
             )
-    os.remove(f'{args.data_folder}/rank_{args.rank}.pckl')
+    os.remove(f"{data_folder}/rank_{rank}.pckl")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument("--data_folder", metavar="S", type=str)
+    parser.add_argument("--subcircuit_idx", metavar="N", type=int)
+    parser.add_argument("--rank", metavar="N", type=int)
+    args = parser.parse_args()
+
+    run_subcircuit(args.rank, args.subcircuit_idx, args.data_folder)

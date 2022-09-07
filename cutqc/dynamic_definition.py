@@ -1,15 +1,19 @@
-import itertools, copy, pickle, subprocess
-from time import perf_counter
-import numpy as np
+import copy
+import itertools
+import multiprocessing
 import os
+import pickle
+from time import perf_counter
 
-from helper_functions.non_ibmq_functions import evaluate_circ
+import numpy as np
 from helper_functions.conversions import quasi_to_real
 from helper_functions.metrics import MSE
+from helper_functions.non_ibmq_functions import evaluate_circ
 
 from cutqc.evaluator import get_num_workers
 from cutqc.graph_contraction import GraphContractor
 from cutqc.helper_fun import add_times
+from cutqc.parallel_merge_probs import run_probability_merge
 from cutqc.post_process_helper import get_reconstruction_qubit_order
 
 
@@ -222,15 +226,16 @@ class DynamicDefinition(object):
             num_jobs=max(num_entries),
             ram_required_per_worker=2 ** max(subcircuit_num_qubits) * 4 / 1e9,
         )
-        procs = []
+
+        procs: list[multiprocessing.Process] = []
         for rank in range(num_workers):
-            python_command = (
-                "python -m cutqc.parallel_merge_probs --data_folder %s --rank %d --num_workers %d"
-                % (self.data_folder, rank, num_workers)
+            proc = multiprocessing.Process(
+                target=run_probability_merge, args=(rank, num_workers, self.data_folder)
             )
-            proc = subprocess.Popen(python_command.split(" "))
+            proc.start()
             procs.append(proc)
-        [proc.wait() for proc in procs]
+        [proc.join() for proc in procs]
+
         merged_subcircuit_entry_probs = {}
         for rank in range(num_workers):
             rank_merged_subcircuit_entry_probs = pickle.load(

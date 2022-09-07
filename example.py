@@ -3,8 +3,9 @@ import os, logging
 
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
-# Comment this line if using GPU
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+# Uncomment this line if using GPU
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # from cutqc_runtime.main import CutQC # Use this just to benchmark the runtime
 

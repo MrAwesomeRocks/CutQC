@@ -1,7 +1,9 @@
-import argparse, pickle, itertools
-import numpy as np
+import argparse
+import itertools
+import pickle
 
-from helper_functions.non_ibmq_functions import find_process_jobs, scrambled
+import numpy as np
+from helper_functions.non_ibmq_functions import find_process_jobs
 
 
 def merge_prob_vector(unmerged_prob_vector, qubit_states):
@@ -34,26 +36,20 @@ def merge_prob_vector(unmerged_prob_vector, qubit_states):
     return merged_prob_vector
 
 
-if __name__ == "__main__":
+def run_probability_merge(rank: int, num_workers: int, data_folder: str) -> None:
     """
     The first merge of subcircuit probs using the target number of bins
     Saves the overhead of writing many states in the first SM recursion
     """
-    parser = argparse.ArgumentParser(description="Merge probs rank.")
-    parser.add_argument("--data_folder", metavar="S", type=str)
-    parser.add_argument("--rank", metavar="N", type=int)
-    parser.add_argument("--num_workers", metavar="N", type=int)
-    args = parser.parse_args()
-
-    meta_info = pickle.load(open("%s/meta_info.pckl" % (args.data_folder), "rb"))
-    dd_schedule = pickle.load(open("%s/dd_schedule.pckl" % (args.data_folder), "rb"))
+    meta_info = pickle.load(open("%s/meta_info.pckl" % (data_folder), "rb"))
+    dd_schedule = pickle.load(open("%s/dd_schedule.pckl" % (data_folder), "rb"))
 
     merged_subcircuit_entry_probs = {}
     for subcircuit_idx in meta_info["entry_init_meas_ids"]:
         rank_jobs = find_process_jobs(
             jobs=list(meta_info["entry_init_meas_ids"][subcircuit_idx].keys()),
-            rank=args.rank,
-            num_workers=args.num_workers,
+            rank=rank,
+            num_workers=num_workers,
         )
         merged_subcircuit_entry_probs[subcircuit_idx] = {}
         for subcircuit_entry_init_meas in rank_jobs:
@@ -63,7 +59,7 @@ if __name__ == "__main__":
             unmerged_prob_vector = pickle.load(
                 open(
                     "%s/subcircuit_%d_entry_%d.pckl"
-                    % (args.data_folder, subcircuit_idx, subcircuit_entry_id),
+                    % (data_folder, subcircuit_idx, subcircuit_entry_id),
                     "rb",
                 )
             )
@@ -75,5 +71,15 @@ if __name__ == "__main__":
             )
     pickle.dump(
         merged_subcircuit_entry_probs,
-        open("%s/rank_%d_merged_entries.pckl" % (args.data_folder, args.rank), "wb"),
+        open("%s/rank_%d_merged_entries.pckl" % (data_folder, rank), "wb"),
     )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Merge probs rank.")
+    parser.add_argument("--data_folder", metavar="S", type=str)
+    parser.add_argument("--rank", metavar="N", type=int)
+    parser.add_argument("--num_workers", metavar="N", type=int)
+    args = parser.parse_args()
+
+    run_probability_merge(args.rank, args.num_workers, args.data_folder)

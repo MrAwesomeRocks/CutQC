@@ -1,22 +1,16 @@
-import argparse, pickle
+import argparse
+import pickle
 import os
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Process some integers.")
-    parser.add_argument("--data_folder", metavar="S", type=str)
-    parser.add_argument("--subcircuit_idx", metavar="N", type=int)
-    parser.add_argument("--rank", metavar="N", type=int)
-    args = parser.parse_args()
 
-    subcircuit_idx = args.subcircuit_idx
-    meta_info = pickle.load(open("%s/meta_info.pckl" % (args.data_folder), "rb"))
+def run_attribute_shots(rank: int, subcircuit_idx: int, data_folder: str) -> None:
+    meta_info = pickle.load(open("%s/meta_info.pckl" % (data_folder), "rb"))
+    rank_jobs = pickle.load(open("%s/rank_%d.pckl" % (data_folder, rank), "rb"))
+
     subcircuit = meta_info["subcircuits"][subcircuit_idx]
     eval_mode = meta_info["eval_mode"]
     instance_init_meas_ids = meta_info["instance_init_meas_ids"]
     entry_init_meas_ids = meta_info["entry_init_meas_ids"][subcircuit_idx]
-    rank_jobs = pickle.load(
-        open("%s/rank_%d.pckl" % (args.data_folder, args.rank), "rb")
-    )
 
     uniform_p = 1 / 2**subcircuit.num_qubits
 
@@ -33,7 +27,7 @@ if __name__ == "__main__":
                     open(
                         "%s/subcircuit_%d_instance_%d.pckl"
                         % (
-                            args.data_folder,
+                            data_folder,
                             subcircuit_idx,
                             subcircuit_instance_init_meas_id,
                         ),
@@ -52,8 +46,18 @@ if __name__ == "__main__":
             subcircuit_entry_prob,
             open(
                 "%s/subcircuit_%d_entry_%d.pckl"
-                % (args.data_folder, subcircuit_idx, entry_init_meas_id),
+                % (data_folder, subcircuit_idx, entry_init_meas_id),
                 "wb",
             ),
         )
-    os.remove(f'{args.data_folder}/rank_{args.rank}.pckl')
+    os.remove(f"{data_folder}/rank_{rank}.pckl")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument("--data_folder", metavar="S", type=str)
+    parser.add_argument("--subcircuit_idx", metavar="N", type=int)
+    parser.add_argument("--rank", metavar="N", type=int)
+    args = parser.parse_args()
+
+    run_attribute_shots(args.rank, args.subcircuit_idx, args.data_folder)
