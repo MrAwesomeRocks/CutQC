@@ -7,7 +7,7 @@ Based on the description given in Whitfield et al.
 (https://arxiv.org/abs/1001.3855?context=physics.chem-ph)
 
 Adapted from a Scaffold implementation by Pranav Gokhale]
-(https://github.com/epiqc/ScaffCC) 
+(https://github.com/epiqc/ScaffCC)
 
 NOTE:
 Qiskit orders their circuits increasing from top -> bottom
@@ -21,15 +21,15 @@ Both Whitfield et al. and Barkoutsos et al. order increasing from bottom -> top
   r 1 ---
   s 0 ---
 
-Not a problem. Qubit index is what matters. Set reverse_bits = True when 
+Not a problem. Qubit index is what matters. Set reverse_bits = True when
 drawing Qiskit circuit.
 
 """
 
-from qiskit import QuantumCircuit, QuantumRegister
-import sys
 import math
+
 import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister  # type: ignore
 
 
 class UCCSD:

@@ -7,7 +7,7 @@ Based on the specification given in Cuccaro, Draper, Kutin, Moulton.
 (https://arxiv.org/abs/quant-ph/0410184v1)
 """
 
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister  # type: ignore
 
 
 class RCAdder:

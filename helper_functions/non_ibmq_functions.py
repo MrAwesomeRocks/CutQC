@@ -1,11 +1,15 @@
-import random, pickle, os, copy, random
-from qiskit import QuantumCircuit
-from qiskit.providers import aer
-from qiskit.converters import circuit_to_dag, dag_to_circuit
-from qiskit.dagcircuit.dagcircuit import DAGCircuit
-from qiskit.quantum_info import Statevector
+import copy
+import os
+import pickle
+import random
+
 import numpy as np
 import psutil
+from qiskit import QuantumCircuit  # type: ignore
+from qiskit.converters import circuit_to_dag, dag_to_circuit  # type: ignore
+from qiskit.dagcircuit.dagcircuit import DAGCircuit  # type: ignore
+from qiskit.providers import aer  # type: ignore
+from qiskit.quantum_info import Statevector  # type: ignore
 
 from helper_functions.conversions import dict_to_array
 

@@ -2,13 +2,12 @@ import argparse
 import os
 import pickle
 
-from helper_functions.non_ibmq_functions import evaluate_circ
-
 from cutqc.evaluator import (
     measure_prob,
     modify_subcircuit_instance,
     mutate_measurement_basis,
 )
+from helper_functions.non_ibmq_functions import evaluate_circ
 
 
 def run_subcircuit(rank: int, subcircuit_idx: int, data_folder: str) -> None:

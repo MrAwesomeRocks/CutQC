@@ -1,6 +1,12 @@
-import sys, math
+import math
+
 import numpy as np
-from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, QiskitError
+from qiskit import (  # type: ignore
+    ClassicalRegister,
+    QiskitError,
+    QuantumCircuit,
+    QuantumRegister,
+)
 
 
 class HWEA:

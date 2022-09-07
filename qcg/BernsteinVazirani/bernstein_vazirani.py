@@ -1,7 +1,4 @@
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
-import sys
-import math
-import numpy as np
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister  # type: ignore
 
 
 class BV:

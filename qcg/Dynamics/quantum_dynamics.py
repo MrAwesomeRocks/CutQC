@@ -1,7 +1,4 @@
-from qiskit import QuantumCircuit, QuantumRegister
-import sys
-import math
-import numpy as np
+from qiskit import QuantumCircuit, QuantumRegister  # type: ignore
 
 
 class Dynamics:

@@ -1,5 +1,4 @@
-from os import times
-from qiskit.converters import circuit_to_dag
+from qiskit.converters import circuit_to_dag  # type: ignore
 
 
 def check_valid(circuit):

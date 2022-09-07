@@ -1,4 +1,5 @@
-import itertools, copy, math
+import copy
+import itertools
 
 
 class ComputeGraph(object):

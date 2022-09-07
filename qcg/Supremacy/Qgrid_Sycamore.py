@@ -1,9 +1,9 @@
-from .Qbit_Sycamore import Qbit
-from .ABCD_layer_generation import get_layers
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 import math
-import sys
-import numpy as np
+
+from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister  # type: ignore
+
+from .ABCD_layer_generation import get_layers
+from .Qbit_Sycamore import Qbit
 
 
 class Qgrid:

@@ -4,17 +4,18 @@ Input:
 circ_dict (dict): circ (not transpiled), shots, evaluator_info (optional)
 """
 
-import math, copy, random, pickle
-import numpy as np
-from qiskit.compiler import transpile, assemble
-from qiskit import Aer, execute
-from qiskit.providers.aer import QasmSimulator
-from time import time
+import copy
+import math
+import pickle
 from datetime import datetime
+from time import time
 
-from helper_functions.non_ibmq_functions import apply_measurement
-from helper_functions.ibmq_functions import get_device_info
+from qiskit import Aer, execute  # type: ignore
+from qiskit.compiler import assemble, transpile  # type: ignore
+
 from helper_functions.conversions import dict_to_array, memory_to_dict
+from helper_functions.ibmq_functions import get_device_info
+from helper_functions.non_ibmq_functions import apply_measurement
 
 
 class ScheduleItem:

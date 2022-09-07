@@ -27,6 +27,8 @@ mypy = "^0.971"
 isort = "^5.10.1"
 gurobipy-stubs = "^1.0.1"
 types-psutil = "^5.9.5"
+networkx-stubs = "^0.0.0"
+types-pytz = "^2022.2.1.0"
 
 [build-system]
 requires = ["poetry-core"]

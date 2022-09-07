@@ -1,7 +1,7 @@
-import numpy as np
 import copy
-from sklearn.linear_model import LinearRegression
-from qiskit.quantum_info import Statevector
+
+import numpy as np
+from sklearn.linear_model import LinearRegression  # type: ignore
 
 
 def chi2_distance(target, obs):

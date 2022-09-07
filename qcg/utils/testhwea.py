@@ -1,6 +1,7 @@
 import sys
-from qiskit import Aer, execute
-from quantum_circuit_generator.generators import gen_hwea
+
+from qcg.generators import gen_hwea
+from qiskit import Aer, execute  # type: ignore
 
 n = 6
 circ = gen_hwea(n, 1)
@@ -10,6 +11,7 @@ simulator = Aer.get_backend("statevector_simulator")
 result = execute(circ, simulator).result()
 sv = result.get_statevector(circ)
 print(sv)
+
 
 # entanglement measure
 def sgn_star(n, i):

@@ -1,8 +1,9 @@
-from qiskit.dagcircuit.dagcircuit import DAGCircuit
-from qiskit.converters import circuit_to_dag, dag_to_circuit
-import gurobipy as gp
 import math
-from qiskit import QuantumCircuit, QuantumRegister
+
+import gurobipy as gp
+from qiskit import QuantumCircuit, QuantumRegister  # type:ignore
+from qiskit.converters import circuit_to_dag, dag_to_circuit  # type: ignore
+from qiskit.dagcircuit.dagcircuit import DAGCircuit  # type: ignore
 
 
 class MIP_Model(object):

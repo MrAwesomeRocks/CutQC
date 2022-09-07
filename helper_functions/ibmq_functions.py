@@ -1,13 +1,14 @@
-from qiskit import IBMQ
-from qiskit.providers.jobstatus import JobStatus
-from qiskit.providers.aer.noise import NoiseModel
-from qiskit.transpiler import CouplingMap
-from datetime import timedelta, datetime
-from pytz import timezone
-import time
 import os
 import pickle
 import shutil
+import time
+from datetime import datetime, timedelta
+
+from pytz import timezone
+from qiskit import IBMQ  # type: ignore
+from qiskit.providers.aer.noise import NoiseModel  # type: ignore
+from qiskit.providers.jobstatus import JobStatus  # type: ignore
+from qiskit.transpiler import CouplingMap  # type: ignore
 
 from helper_functions.non_ibmq_functions import read_dict
 
