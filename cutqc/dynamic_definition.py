@@ -13,7 +13,7 @@ from helper_functions.non_ibmq_functions import evaluate_circ
 from cutqc.evaluator import get_num_workers
 from cutqc.graph_contraction import GraphContractor
 from cutqc.helper_fun import add_times
-from cutqc.parallel_merge_probs import run_probability_merge
+from cutqc.parallel.merge_probs import run_probability_merge
 from cutqc.post_process_helper import get_reconstruction_qubit_order
 
 

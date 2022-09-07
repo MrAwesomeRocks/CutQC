@@ -52,7 +52,7 @@ def run_subcircuit_instances(
         )
 
         # Circular imports :(
-        from cutqc.parallel_run_subcircuits import run_subcircuit
+        from cutqc.parallel.run_subcircuits import run_subcircuit
 
         procs: list[multiprocessing.Process] = []
         for rank in range(num_workers):
@@ -216,7 +216,7 @@ def attribute_shots(subcircuit_entries, subcircuits, eval_mode, data_folder):
         )
 
         # Circular imports :(
-        from cutqc.parallel_attribute_shots import run_attribute_shots
+        from cutqc.parallel.attribute_shots import run_attribute_shots
 
         procs: list[multiprocessing.Process] = []
         for rank in range(num_workers):
