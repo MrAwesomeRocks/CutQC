@@ -25,6 +25,8 @@ flake8 = "^5.0.4"
 black = "^22.8.0"
 mypy = "^0.971"
 isort = "^5.10.1"
+gurobipy-stubs = "^1.0.1"
+types-psutil = "^5.9.5"
 
 [build-system]
 requires = ["poetry-core"]

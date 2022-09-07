@@ -1,11 +1,11 @@
-import itertools, math
+import itertools
+import logging
+import os
 from time import perf_counter
-import numpy as np
-import logging, os
 
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-import tensorflow as tf
+import tensorflow as tf  # type:ignore # noqa: E402
 
 
 def compute_summation_term(*argv):

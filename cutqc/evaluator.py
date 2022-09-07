@@ -1,14 +1,14 @@
 import copy
 import itertools
+import multiprocessing
 import os
 import pickle
-import multiprocessing
 
 import numpy as np
 import psutil
 from helper_functions.non_ibmq_functions import find_process_jobs, scrambled
-from qiskit.circuit.library.standard_gates import HGate, SdgGate, SGate, XGate
-from qiskit.converters import circuit_to_dag, dag_to_circuit
+from qiskit.circuit.library.standard_gates import HGate, SdgGate, SGate, XGate  # type: ignore
+from qiskit.converters import circuit_to_dag, dag_to_circuit  # type: ignore
 
 
 def get_num_workers(num_jobs, ram_required_per_worker):
