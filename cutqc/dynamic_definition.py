@@ -1,6 +1,7 @@
 import itertools, copy, pickle, subprocess
 from time import perf_counter
 import numpy as np
+import os
 
 from helper_functions.non_ibmq_functions import evaluate_circ
 from helper_functions.conversions import quasi_to_real
@@ -244,9 +245,7 @@ class DynamicDefinition(object):
                     merged_subcircuit_entry_probs[subcircuit_idx].update(
                         rank_merged_subcircuit_entry_probs[subcircuit_idx]
                     )
-            subprocess.run(
-                ["rm", "%s/rank_%d_merged_entries.pckl" % (self.data_folder, rank)]
-            )
+            os.remove(f"{self.data_folder}/rank_{rank}_merged_entries.pckl")
         self.times["merge_states_into_bins"] += perf_counter() - begin
         return merged_subcircuit_entry_probs
 

@@ -1,4 +1,4 @@
-import subprocess, os
+import shutil, os
 from time import perf_counter
 
 from cutqc.helper_fun import check_valid, add_times
@@ -35,7 +35,7 @@ class CutQC:
         self.times = {}
         self.tmp_data_folder = "cutqc/tmp_data"
         if os.path.exists(self.tmp_data_folder):
-            subprocess.run(["rm", "-r", self.tmp_data_folder])
+            self.clean_data()
         os.makedirs(self.tmp_data_folder)
 
     def cut(self):
@@ -111,7 +111,7 @@ class CutQC:
             print("Overhead = {}".format(self.overhead))
 
     def clean_data(self):
-        subprocess.run(["rm", "-r", self.tmp_data_folder])
+        shutil.rmtree(self.tmp_data_folder)
 
     def _generate_metadata(self):
         self.compute_graph = generate_compute_graph(

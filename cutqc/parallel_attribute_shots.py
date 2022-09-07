@@ -1,4 +1,5 @@
-import argparse, pickle, subprocess
+import argparse, pickle
+import os
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
@@ -55,4 +56,4 @@ if __name__ == "__main__":
                 "wb",
             ),
         )
-    subprocess.run(["rm", "%s/rank_%d.pckl" % (args.data_folder, args.rank)])
+    os.remove(f'{args.data_folder}/rank_{args.rank}.pckl')

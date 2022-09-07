@@ -5,9 +5,9 @@ from qiskit.transpiler import CouplingMap
 from datetime import timedelta, datetime
 from pytz import timezone
 import time
-import subprocess
 import os
 import pickle
+import shutil
 
 from helper_functions.non_ibmq_functions import read_dict
 
@@ -27,7 +27,7 @@ def get_device_info(token, hub, group, project, device_name, fields, datetime):
         if not os.path.exists(dirname):
             os.makedirs(dirname)
         else:
-            subprocess.run(["rm", "-r", dirname])
+            shutil.rmtree(dirname)
             os.makedirs(dirname)
         provider = load_IBMQ(token=token, hub=hub, group=group, project=project)
         for x in provider.backends():

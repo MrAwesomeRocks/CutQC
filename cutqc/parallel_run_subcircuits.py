@@ -1,4 +1,4 @@
-import argparse, pickle, subprocess
+import argparse, pickle, os
 
 from helper_functions.non_ibmq_functions import evaluate_circ
 
@@ -67,4 +67,4 @@ if __name__ == "__main__":
                     "wb",
                 ),
             )
-    subprocess.run(["rm", "%s/rank_%d.pckl" % (args.data_folder, args.rank)])
+    os.remove(f'{args.data_folder}/rank_{args.rank}.pckl')

@@ -1,4 +1,5 @@
-import subprocess, os
+import fnmatch
+import os
 import shutil
 from time import perf_counter
 
@@ -196,6 +197,6 @@ class CutQC:
             eval_mode=self.eval_mode,
             data_folder=self.tmp_data_folder,
         )
-        subprocess.call(
-            "rm %s/subcircuit*instance*.pckl" % self.tmp_data_folder, shell=True
-        )
+        for file in os.listdir(self.tmp_data_folder):
+            if fnmatch.fnmatch(file, "subcircuit*instance*.pckl"):
+                os.remove(os.path.join(self.tmp_data_folder, file))
