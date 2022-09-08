@@ -29,6 +29,7 @@ gurobipy-stubs = "^1.0.1"
 types-psutil = "^5.9.5"
 networkx-stubs = "^0.0.0"
 types-pytz = "^2022.2.1.0"
+scalene = "^1.5.10"
 
 [build-system]
 requires = ["poetry-core"]
